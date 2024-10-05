@@ -6,11 +6,11 @@ class GPT:
         self.chatGPT_key = os.environ["chatGPT_key"]
         self.client = OpenAI(api_key=self.chatGPT_key)
 
-    def get_response(self):
+    def get_response(self, content):
         response = self.client.chat.completions.create(
             messages=[{
                 "role": "user",
-                "content": "Return only the the name of the city pressent in the following text, if none retun [null], the text is[locuiesc in dolhasca]",
+                "content": content,
             }],
             model="gpt-3.5-turbo",
         )
