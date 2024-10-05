@@ -18,18 +18,28 @@ def get_lat_lon(city, country):
         print("Location not found!")
         return None, None
 
-def get_precipitation_data(lat, lon, start_date, end_date, username, password):
-    base_url = "https://api.meteomatics.com"
-    parameters = "precip_1h:mm"  
-    time_range = f"{start_date}--{end_date}:PT1H" 
 
-    url = f"{base_url}/{time_range}/{parameters}/{lat},{lon}/json"
+def getPrecipitationForDateRange(data, start_date, end_date):
 
-    response = requests.get(url, auth=(username, password))
+    try:
+        total_precipitation = 0
+        start_dt = datetime.strptime(start_date, '%Y-%m-%d')
+        end_dt = datetime.strptime(end_date, '%Y-%m-%d')
 
-    if response.status_code == 200:
-        data = response.json()
-        print("API Response: ", data)
+        for parameter_data in data['data']:
+            if parameter_data['parameter'] == 'precip_1h:mm':
+                for location in parameter_data['coordinates']:
+                    for entry in location['dates']:
+                        entry_date = datetime.strptime(entry['date'][:10], '%Y-%m-%d') 
+                        if start_dt <= entry_date <= end_dt:
+                            total_precipitation += entry['value']
+
+        return total_precipitation
+
+    except KeyError:
+        raise ValueError("Precipitation data not found in the response")
+
+
 
 def main():
     city = input("Enter city name: ")
@@ -49,7 +59,7 @@ def main():
         print(f"Error in date format: {e}")
         return
 
-    precip_df = get_precipitation_data(lat, lon, start_date, end_date, USERNAME, PASSWORD)
+    precip_df = getPrecipitationForDateRange(data, start_date, end_date)
 
 
 if __name__ == "__main__":
