@@ -1,9 +1,18 @@
 def getPrecipitationData(data):
     try:
-        precipitation = data.get('precipitation', 0)
-        return precipitation
+        total_precipitation = 0
+        for parameter_data in data['data']:
+            if parameter_data['parameter'] == 'precip_1h:mm':    #mm/1h
+                for location in parameter_data['coordinates']:
+                    for entry in location['dates']:
+                        total_precipitation+=entry['value']
+        
+        return total_precipitation
+
     except KeyError:
         raise ValueError("Precipitation data not found in the response")
+
+
 
 def getEvaporationData(data):
     try:
