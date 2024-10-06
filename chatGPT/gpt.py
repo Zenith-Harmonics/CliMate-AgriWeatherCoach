@@ -9,7 +9,7 @@ class GPT:
     def get_response(self, content):
         response = self.client.chat.completions.create(
             messages=[{
-                "role": "user",
+                "role": "assistant",
                 "content": content,
             }],
             model="gpt-3.5-turbo",
