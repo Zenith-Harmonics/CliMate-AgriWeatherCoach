@@ -21,7 +21,7 @@ def get_lat_lon(city, country):
 
 def get_precipitation_data(lat, lon, start_date, end_date, username, password):
     base_url = "https://api.meteomatics.com"
-    parameters = "precip_1h:mm"  
+    parameters = "precip_1h:mm"
     time_range = f"{start_date}--{end_date}:PT1H" 
 
     url = f"{base_url}/{time_range}/{parameters}/{lat},{lon}/json"
@@ -30,7 +30,7 @@ def get_precipitation_data(lat, lon, start_date, end_date, username, password):
 
     if response.status_code == 200:
         data = response.json()
-        print("API Response: ", data)
+        return data
 
 
 
@@ -47,13 +47,18 @@ def main():
 
     try:
         start_date = f"{start_date}T00:00:00Z"
-        end_date = f"{end_date}T23:59:59Z"
+        end_date = f"{end_date}T00:00:00Z"
     except Exception as e:
         print(f"Error in date format: {e}")
         return
 
     precip_df = get_precipitation_data(lat, lon, start_date, end_date, USERNAME, PASSWORD)
-
+    values = []
+    for item in precip_df['data']:
+        for coordinate in item['coordinates']:
+            for date_entry in coordinate['dates']:
+                values.append(date_entry['value'])
+    print(sum(values)/len(values))
 
 if __name__ == "__main__":
     main()
