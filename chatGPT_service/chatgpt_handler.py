@@ -24,7 +24,7 @@ class ChatGPT:
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
-                messages=[{"role": "user", "content": prompt}],
+                messages=[{"role": "assistant", "content": prompt}],
                 max_tokens=max_tokens
             )
             response = response.model_dump()
@@ -48,4 +48,4 @@ class ChatGPT:
 if __name__ == "__main__":
     chatgpt = ChatGPT(os.getenv("CHATGPT_API_KEY"))
 
-    print(chatgpt.generate_response("hi"))
+    print(chatgpt.generate_response("write me a story"))
