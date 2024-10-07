@@ -2,10 +2,10 @@ from anyio.abc import value
 from jiter.jiter import from_json
 
 import functions.test_functions
-from chatGPT import gpt
 from functions import JSON_response
 from dotenv import load_dotenv
 import os
+from chatGPT_service import chatgpt_handler
 from functions import test_functions
 load_dotenv()
 
@@ -14,10 +14,10 @@ PASSWORD = os.getenv("METEOMATICS_PASSWORD")
 
 def main():
     # Initialize GPT model instance
-    chatgpt = gpt.GPT()
+    chatgpt = chatgpt_handler.ChatGPT(os.getenv("CHATGPT_API_KEY"))
 
     # Greet the user as "CliMate" and ask how you can help
-    response = chatgpt.get_response("You are CliMate, an agri-weather coach. Greet the user and ask how you can help them.(short)")
+    response = chatgpt.generate_response("You are CliMate, an agri-weather coach. Greet the user and ask how you can help them.(short)")
     response = "CliMate: " + response
     print(response)
 
@@ -26,10 +26,10 @@ def main():
         user_input = input("\nUser: ")
 
         # Ask if the input is related to precipitation
-        response = chatgpt.get_response(f"{user_input}, is this text related to precipitation? Respond with 'yes' or 'no'.")
+        response = chatgpt.generate_response(f"{user_input}, is this text related to precipitation? Respond with 'yes' or 'no'.")
 
         if response.lower().strip() == "yes":
-            response = chatgpt.get_response(
+            response = chatgpt.generate_response(
                 f"Ask user about his country and city")
             response = "\nCliMate: " + response
 
@@ -37,7 +37,7 @@ def main():
 
             user_input = input("\nUser: ")
 
-            response = chatgpt.get_response(
+            response = chatgpt.generate_response(
                 f"'{user_input}', which city appears in the text? respond 'city country' ")
 
 
