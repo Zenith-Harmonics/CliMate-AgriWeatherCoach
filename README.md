@@ -2,6 +2,8 @@
 
 This is a simple demonstration project developed for the **NASA Space Apps Challenge 2024**. The goal is to connect a conversational AI (Large Language Model) with a weather API to provide weather-related insights for agricultural purposes.
 
+In an experimental approach, we tried to let ChatGPT handle as much of the process as possible by leveraging its natural language understanding and task automation capabilities. The key idea was to minimize manual coding and intervention while maximizing the AI’s ability to interpret user requests, fetch data, and generate actionable insights.
+
 ## **Project Overview**
 
 **CliMate** is an agri-weather assistant that allows users to ask weather-related questions and get useful information based on real-time data. By combining the power of a natural language model and weather data, CliMate helps users make informed farming decisions.
