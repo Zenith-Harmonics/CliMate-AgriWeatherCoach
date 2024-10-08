@@ -33,7 +33,7 @@ def main():
     chatgpt = chatgpt_handler.ChatGPT(CHATGPT_API_KEY)
 
     # Topics the bot will recognize
-    conversation_topics = ['precipitation']
+    conversation_topics = ['precipitation', 'soil moisture']
 
     # Track conversation status (city, country, topic)
     conversation_status = {
@@ -51,22 +51,36 @@ def main():
     while True:
         user_input = get_input()  # Capture user input
 
-        # Generate prompt for ChatGPT based on user input and current conversation state
-        prompt = f"You are AgriWeather Coach."
-        prompt += f"This is the user input: {user_input} and this is the conversation status: {conversation_status}."
-        prompt += f"Return a JSON with the following keys: 'city', 'country', and if the user's input is related to one of the topics from this list: {conversation_topics}, set 'topic' to the name of the topic. If not, set it to 'none'."
-        prompt += f"Add the key 'message' and set it to a message for the user based on missing information from the conversation status."
+        prompt = f"""
+            You are a chatbot assisting a user with weather information.
+            Here is the user's input: "{user_input}"
+            Here is the current conversation status: {conversation_status}
+            And here is a list of topics the available: {conversation_topics}.
 
-        # Get response from ChatGPT
+            Based on this, provide a JSON response with:
+            - City
+            - Country
+            - The topic if the user's input is related to discussion topics if not set to none
+            - Ask the user only for the missing conversation statuses
+            - Update the conversation status
+            - Use 'None' instead of null
+
+            Format the response in JSON like this:
+            {{
+                "city": "<city>",
+                "country": "<country>",
+                "topic": "<topic>",
+                "message": "<message for user>"
+            }}
+            """
         response = chatgpt.generate_response(prompt)
-
-        # Parse the response into a dictionary
-        response = json.loads(response)
+        response = json.loads(response.strip())
+        conversation_status = response
 
         # Check for missing information in the response
         missing = []
         for key in response.keys():
-            if response[key] is None:
+            if response[key] == 'None':
                 missing.append(key)
 
         # If no information is missing, proceed with fetching weather data
@@ -96,15 +110,13 @@ def main():
             else:
                 print(
                     "\nCliMate: Based on the precipitation data gathered from your location, the risk of flooding is high, which creates unfavorable conditions for farming.\nExercise caution, as the current weather patterns indicate potential disruptions to agricultural activities.")
-
         else:
-            # Update conversation status if any information is missing
-            conversation_status = response
-            print_response(response['message'])  # Ask for missing info
 
+            print_response(response['message'])
 
 if __name__ == "__main__":
     # Entry point to run the script
     main()
     # JSON_response.main() # This seems like it might be an old or unused line of code; you can remove or use it based on your need.
+
 
