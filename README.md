@@ -23,25 +23,14 @@ This is a simple demonstration project developed for the **NASA Space Apps Chall
 - API keys for OpenAI (ChatGPT) and METEOMATICS.
 
 ### **Steps**
-1. Clone the repository:
-    ```bash
-    git clone https://github.com/your-username/CliMate-Demo.git
-    cd CliMate-Demo
-    ```
-
-2. Install the required dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-3. Create a `.env` file and add your API keys:
+1. Create a `.env` file and add your API keys:
     ```
     METEOMATICS_USERNAME=your_meteomatics_username
     METEOMATICS_PASSWORD=your_meteomatics_password
     CHATGPT_API_KEY=your_chatgpt_api_key
     ```
 
-4. Run the program:
+2. Run the program:
     ```bash
     python main.py
     ```
