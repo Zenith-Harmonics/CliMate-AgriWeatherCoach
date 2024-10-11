@@ -117,8 +117,6 @@ class Meteomatics_Service:
                 # Ask the user for missing information
                 self.print_response(response_dict['message'])
 
-
 if __name__ == "__main__":
     meteomatics=Meteomatics_Service()
     meteomatics.run()
-
